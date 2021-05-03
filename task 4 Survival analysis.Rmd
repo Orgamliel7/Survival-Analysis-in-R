@@ -1,25 +1,25 @@
 ---
-title: "Survival Analysis"
-author: "Anat"
-date: "5 4 2021"
+title: "Survival Analysis course by Dr.Anat"
+author: "Or gamliel"
+date: "1 5 2021"
 output: html_document
 ---
 
 ```{r}
 # להוריד חבילות נדרשות ולנסות שוב
-install.packages("SemiCompRisks")
-install.packages("kableExtra")
-install.packages("broom")
-install.packages("survival")
+#install.packages("SemiCompRisks")
+#install.packages("kableExtra")
+#install.packages("broom")
+#install.packages("survival")
 library(survival)
 library(survminer)
 library(lubridate)
 library(survival)
 setwd("C:\\org")
 library(survival)
-library(randomForestSRC)
-library(survivalsvm)
-library(Hmisc)
+#library(randomForestSRC)
+#library(survivalsvm)
+#library(Hmisc)
 
 
 ```
@@ -42,12 +42,13 @@ View(hours)
 
 ```{r}
 # Kaplan-Meier non-parametric analysis
-f1 <- survfit(Surv(time, status) ~ 1, data = lung)
-names(f1)
+#library(survival)
+#library(survminer)
+
 
 kaplan <- survfit(Surv(time, status) ~ 1, data = lung)
-names(f1)
-kmsurvival <- survfit(Surv(time,event) ~ 1)
+names(kaplan)
+print("summary of kaplan-meier:")
 summary(kaplan)
 
 ```
@@ -83,7 +84,7 @@ ggsurvplot( #  ggsurvplot ע"י Kaplan-Meier plot יצירת
 ```{r}
 # Kaplan-Meier non-parametric analysis by group
 
-#summary(kaplan)
+summary(kaplan)
 
 
 ```
