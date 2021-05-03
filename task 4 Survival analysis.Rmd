@@ -7,19 +7,19 @@ output: html_document
 
 ```{r}
 # להוריד חבילות נדרשות ולנסות שוב
-#install.packages("SemiCompRisks")
-#install.packages("kableExtra")
-#install.packages("broom")
-#install.packages("survival")
+install.packages("SemiCompRisks")
+install.packages("kableExtra")
+install.packages("broom")
+install.packages("survival")
 library(survival)
 library(survminer)
 library(lubridate)
 library(survival)
 setwd("C:\\org")
 library(survival)
-#library(randomForestSRC)
-#library(survivalsvm)
-#library(Hmisc)
+library(randomForestSRC)
+library(survivalsvm)
+library(Hmisc)
 
 
 ```
@@ -42,8 +42,8 @@ View(hours)
 
 ```{r}
 # Kaplan-Meier non-parametric analysis
-#library(survival)
-#library(survminer)
+library(survival)
+library(survminer)
 
 
 kaplan <- survfit(Surv(time, status) ~ 1, data = lung)
@@ -122,15 +122,15 @@ coxph(Surv(time, status) ~ sex, data = lung)
 
 ```
 
-```{r}
 
+
+```{r}
+coxph(Surv(time, status) ~ sex, data = lung) %>% 
+  gtsummary::tbl_regression(exp = TRUE) 
 ```
 
 ```{r}
 
-```
-
-```{r}
 
 ```
 
