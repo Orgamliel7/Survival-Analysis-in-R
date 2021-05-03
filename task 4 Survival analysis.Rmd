@@ -1,0 +1,146 @@
+---
+title: "Survival Analysis"
+author: "Anat"
+date: "5 4 2021"
+output: html_document
+---
+
+```{r}
+# להוריד חבילות נדרשות ולנסות שוב
+install.packages("SemiCompRisks")
+install.packages("kableExtra")
+install.packages("broom")
+install.packages("survival")
+library(survival)
+library(survminer)
+library(lubridate)
+library(survival)
+setwd("C:\\org")
+library(survival)
+library(randomForestSRC)
+library(survivalsvm)
+library(Hmisc)
+
+
+```
+
+## Non parametric approaches
+
+### Kaplan-Meier non-parametric analysis
+
+
+```{r}
+#hours צפייה בנתונים
+file_path = file.path(getwd(),"48_ hours_sample")
+hours <- read.csv(file = '48_ hours_sample.csv')
+View(hours)
+
+
+```
+
+
+
+```{r}
+# Kaplan-Meier non-parametric analysis
+f1 <- survfit(Surv(time, status) ~ 1, data = lung)
+names(f1)
+
+kaplan <- survfit(Surv(time, status) ~ 1, data = lung)
+names(f1)
+kmsurvival <- survfit(Surv(time,event) ~ 1)
+summary(kaplan)
+
+```
+
+
+```{r}
+
+#plot(, xlab="Time", ylab="Survival Probability")
+plot(survfit(Surv(time, status) ~ 1, data = lung), 
+     xlab = "ימים שעברו", 
+     ylab = "הסיכויים להישרדות")
+```
+
+
+```{r}
+(kaplan$n.risk)
+kaplan$n.event
+
+plot(kaplan$time[1:25], kaplan$n.event[1:25]/kaplan$n.risk[1:25],xlab="זמן", ylab="אחוז הסיכון", type = "l")
+```
+
+```{r}
+ggsurvplot( #  ggsurvplot ע"י Kaplan-Meier plot יצירת
+  fit = survfit(Surv(time, status) ~ 1, data = lung), 
+  xlab = "ימים שעברו", 
+  ylab = "הסיכויים להישרדות")
+
+```
+
+### Kaplan-Meier non-parametric analysis by group
+
+
+```{r}
+# Kaplan-Meier non-parametric analysis by group
+
+#summary(kaplan)
+
+
+```
+
+
+```{r}
+summary(survfit(Surv(time, status) ~ 1, data = lung), times = 365.25)
+```        
+        
+```{r}
+
+survfit(Surv(time, status) ~ 1, data = lung)
+
+```
+### 
+
+```{r}
+# Nelson-Aalen non-parametric analysis
+survdiff(Surv(time, status) ~ sex, data = lung)
+```
+
+
+```{r}
+sd <- survdiff(Surv(time, status) ~ sex, data = lung)
+1 - pchisq(sd$chisq, length(sd$n) - 1)
+
+```
+## 
+
+```{r}
+
+# Cox proportional hazard model - coefficients and hazard rates
+coxph(Surv(time, status) ~ sex, data = lung)
+
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

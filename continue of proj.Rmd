@@ -1,0 +1,83 @@
+
+
+## Exponential, Weibull, and log-logistic parametric model coefficients
+
+### Exponential
+```{r}
+broom::tidy(
+  coxph(Surv(time, status) ~ sex, data = lung), 
+  exp = TRUE
+  ) %>% 
+ # kable()
+
+```
+### Weibull
+
+```{r}
+weibull <- survreg(Surv(time,event) ~ X, dist="weibull")
+summary(weibull)
+```
+
+
+```{r}
+
+coxph(Surv(time, status) ~ sex, data = lung) %>% 
+  gtsummary::tbl_regression(exp = TRUE) 
+
+```
+### BMT dataset - 
+
+```{r}
+data(BMT, package = "SemiCompRisks")
+```
+
+
+```{r}
+lm_dat <- 
+  BMT %>% 
+  filter(T1 >= 90) 
+```
+
+### 
+```{r}
+lm_dat <- 
+  lm_dat %>% 
+  mutate(
+    lm_T1 = T1 - 90
+    )
+
+lm_fit <- survfit(Surv(lm_T1, delta1) ~ deltaA, data = lm_dat)
+```
+
+### Cox regression landmark example using BMT data
+```{r}
+coxph(
+  Surv(T1, delta1) ~ deltaA, 
+  subset = T1 >= 90, 
+  data = BMT
+  ) %>% 
+  gtsummary::tbl_regression(exp = TRUE)
+```
+
+```{r}
+bmt <- rowid_to_column(BMT, "my_id")
+```
+
+```{r}
+td_dat <- 
+  tmerge(
+    data1 = bmt %>% select(my_id, T1, delta1), 
+    data2 = bmt %>% select(my_id, T1, delta1, TA, deltaA), 
+    id = my_id, 
+    death = event(T1, delta1),
+    agvhd = tdc(TA)
+    )
+```
+##
+```{r}
+coxph(
+  Surv(time = tstart, time2 = tstop, event = death) ~ agvhd, 
+  data = td_dat
+  ) %>% 
+  gtsummary::tbl_regression(exp = TRUE)
+```
