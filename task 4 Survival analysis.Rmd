@@ -6,12 +6,12 @@ output: html_document
 ---
 
 ```{r}
-# להוריד חבילות נדרשות ולנסות שוב
+#  להוריד חבילות נדרשות ולנסות שוב להריץ , גירסא 23.0
 install.packages("SemiCompRisks")
 install.packages("kableExtra")
 install.packages("broom")
 install.packages("survival")
-library(survival)
+#library(survival)
 library(survminer)
 library(lubridate)
 library(survival)
@@ -41,11 +41,12 @@ View(hours)
 
 
 ```{r}
-# Kaplan-Meier non-parametric analysis
+# ניעזר בספריות כדי לייבא מידע ופונקציות נדרשות
 library(survival)
 library(survminer)
 
 
+#פונקציה זו יוצרת עקומות הישרדות על בסיס נוסחה. בואו ניצור את עקומת ההישרדות הכוללת עבור כל הקבוצה, נקצה אותה לאובייקט "קפלן" ונראה את השמות של אותו אובייקט 
 kaplan <- survfit(Surv(time, status) ~ 1, data = lung)
 names(kaplan)
 print("summary of kaplan-meier:")
@@ -55,8 +56,8 @@ summary(kaplan)
 
 
 ```{r}
-
-#plot(, xlab="Time", ylab="Survival Probability")
+library(survival)
+library(survminer)
 plot(survfit(Surv(time, status) ~ 1, data = lung), 
      xlab = "ימים שעברו", 
      ylab = "הסיכויים להישרדות")
@@ -131,17 +132,54 @@ coxph(Surv(time, status) ~ sex, data = lung) %>%
 
 ```{r}
 
-
+ggscatter(lung,
+x = "ph.karno",
+y = "pat.karno",
+color = "sex",
+title = "מתאם בין ביצועי סולם קרנופסקי, רופא מול פציינט ",
+xlab = "מדד הרופא",
+ylab = "מדד הפציינט",
+add = "reg.line",
+add.params = list(color = "lightblue"),
+conf.int = TRUE,
+ellipse.type = "confidence",
+mean.point = TRUE,
+mean.point.size = 5,
+cor.coef = TRUE,
+cor.coeff.args = list(method = "spearman", label.x.npc = "middle", label.y.npc = "bottom")
+)
 ```
 
 ```{r}
+#חציון ההישרדות  לפי גיל
+library(sm)
 
+sm.options(
+  list(
+    xlab = "גיל",
+    ylab = "זמן שנותר לחיות")
+  )
+
+sm.survival(
+  x = lung$age,
+  y = lung$time,
+  status = lung$status,
+  h = sd(lung$age) / nrow(lung)^(-1/4)
+  )
 ```
+
+
+
 
 ```{r}
+#  הקו שקיבלנו חלקלק מדיי, ננסה להפחית בשליש את הפרמטר כדי לקבל  
+# h = סטיית תקן של המשתנה הרציף
+sm.survival(
+  x = lung$age,
+  y = lung$time,
+  status = lung$status,
+  h = (1/4) * sd(lung$age) / nrow(lung)^(-1/3)
+  )
 
 ```
 
-```{r}
-
-```
